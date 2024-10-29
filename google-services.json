@@ -1,0 +1,62 @@
+{
+  "project_info": {
+    "project_number": "893186141142",
+    "project_id": "billing-baba",
+    "storage_bucket": "billing-baba.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:893186141142:android:acf7bc8c653a290c8ad277",
+        "android_client_info": {
+          "package_name": "com.rohit0902.billingbabanew"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "893186141142-5tmsi45uc6nebutb549ons511n5k4vrd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.rohit0902.billingbabanew",
+            "certificate_hash": "b1838444e1fbdb9a95c38963c69270078571c8e3"
+          }
+        },
+        {
+          "client_id": "893186141142-cudivkjk9g3smajrk6tmaoom1f2irrj6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.rohit0902.billingbabanew",
+            "certificate_hash": "dd73ea9c0056188e7aae7e83ab94faf0507ba41e"
+          }
+        },
+        {
+          "client_id": "893186141142-aabed983nqjlb6of6i8oi2l50ss346qu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCTHYKhCmUx8LPvyIKZ_o3TcCqpKnp6ftM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "893186141142-aabed983nqjlb6of6i8oi2l50ss346qu.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "893186141142-959s7kf394nck5vfd24iqqjq33hcd9kt.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.biilingbaba.billingbabaisoapp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
