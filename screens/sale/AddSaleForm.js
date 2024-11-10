@@ -16,8 +16,13 @@ import PaymentModal from "../../components/modals/sale/PaymentModal"
 import PackageModal from '../../components/modals/sale/PackageModal'
 import SaleTypeModal from '../../components/modals/sale/SaleTypeModal';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import CartModal from '../../components/modals/sale/CartModal';
+import { useCart } from '../../components/providers/CartProvider';
 export default function AddSaleForm() {
-    
+    const { cart, setCart } = useCart();
+    useEffect(()=>{
+        console.log(cart)
+    },[cart])
     const navigation = useNavigation()
     // party modals
     const [partymodal, setPartyModal] = useState(false);
@@ -610,6 +615,7 @@ export default function AddSaleForm() {
             <PaymentModal modalVisible={paymentModal} setModalVisible={setPaymentModal} saleType={saleType} setBillingAddress={setBillingAddress} selectedPaymentType={selectedPaymentType} paymentTypes={paymentTypes} setSelectedPaymentType={setSelectedPaymentType} setRoundOff={setRoundOff} taxes={taxes} totalTax={totalTax} setTotalTax={setTotalTax} setPaid={setPaid} />
             <PackageModal modalVisible={packageModal} setModalVisible={setPackageModal} saleType={saleType} setShippingAddress={setShippingAddress} selectedState={selectedState} setSelectedState={setSelectedState} state_of_supply={state_of_supply} states={states} />
             <SaleTypeModal modalVisible={saleTypeModal} setModalVisible={setSaleTypeModal} saleTypes={saleTypes} saleType={saleType} setSaleType={setSaleType}/>
+            <CartModal modalVisible={cart} setModalVisible={setCart} rows={rows}/>
         </>
     );
     

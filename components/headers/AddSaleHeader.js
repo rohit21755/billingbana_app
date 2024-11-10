@@ -1,8 +1,9 @@
 import { View, Text, TouchableOpacity} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-
+import { useCart } from '../providers/CartProvider';
 import AntDesign from '@expo/vector-icons/AntDesign';
 export default function AddSaleHeader() {
+    const { cart, setCart } = useCart();
     return<>
     <LinearGradient
     colors={['rgba(186, 216, 255, 1)', 'rgba(255, 255, 255, 1)']}
@@ -33,7 +34,7 @@ export default function AddSaleHeader() {
             
 
         </View>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={()=>setCart(!cart)}>
             <AntDesign name='shoppingcart' size={22} color="black" />
         </TouchableOpacity>
     </View>

@@ -36,7 +36,7 @@ const PartyModal = ({modalVisible, setModalVisible, value, partyData, handlePart
             <Pressable
               style={[styles.button, styles.buttonClose]}
               onPress={() => setModalVisible(!modalVisible)}>
-              <Text style={styles.textStyle}>Close Modal</Text>
+              <Text style={styles.textStyle}>Submit</Text>
             </Pressable>
           </View>
         </View>

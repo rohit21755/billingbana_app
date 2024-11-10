@@ -1,4 +1,3 @@
-import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -35,7 +34,8 @@ import AddPurchaseForm from './screens/purchase/AddPurchaseForm';
 import PurchaseItems from './screens/purchase/PurchaseItem';
 import AddExpenses from './screens/AddExpenses';
 import AddExpensesHeader from './components/headers/AddExpensesHeader';
-
+import { useState } from 'react';
+import { CartProvider } from './components/providers/CartProvider';
 export default function App() {
   const Stack = createNativeStackNavigator();
 
@@ -45,7 +45,9 @@ export default function App() {
     <SafeAreaView style={{ flex: 1 }}>
       <NavigationContainer>
       <GlobalStateProvider>
+        <CartProvider>
         <AppNavigator />
+        </CartProvider>
         </GlobalStateProvider>
       </NavigationContainer>
       </SafeAreaView>
@@ -112,7 +114,7 @@ function AppNavigator() {
             name="transactions"
             component={Transactions}
             options={{
-              header: () => <SaleHeader />  // Fixed typo here
+              header: () => <SaleHeader />
             }}
           />
           <Stack.Screen
@@ -138,8 +140,10 @@ function AppNavigator() {
           <Stack.Screen name='partyprofile' component={PartieProfile} options={{
             headerShown: false
           }}/>
-          <Stack.Screen name='addsaleform' component={AddSaleForm} options={{
-         header: () => <AddSaleHeader/>
+          <Stack.Screen name='addsaleform' component={AddSaleForm} 
+        
+          options={{
+         header: () => <AddSaleHeader />
           }}/>
           <Stack.Screen name='paymentin' component={PaymentIn} options={{
          header: () => <PaymentInHeader title="Payment In"/> 
@@ -148,7 +152,7 @@ function AppNavigator() {
          header: () => <PaymentInHeader title="Payment Out"/> 
           }}/>
           <Stack.Screen name='addpurchaseform' component={AddPurchaseForm} options={{
-         header: () => <AddSaleHeader/>
+         header: () => <AddSaleHeader />
           }}/>
           <Stack.Screen name='purchaseitem' component={PurchaseItems} options={{
               headerShown: false

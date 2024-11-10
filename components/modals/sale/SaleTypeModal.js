@@ -36,7 +36,7 @@ const SaleTypeModal = ({modalVisible, setModalVisible, saleTypes, saleType, setS
             <Pressable
               style={[styles.button, styles.buttonClose]}
               onPress={() => setModalVisible(!modalVisible)}>
-              <Text style={styles.textStyle}>Close Modal</Text>
+              <Text style={styles.textStyle}>Submit</Text>
             </Pressable>
           </View>
         </View>
