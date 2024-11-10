@@ -1,4 +1,4 @@
-import { Text, View, TextInput, TouchableOpacity, ScrollView } from 'react-native';
+import { Text, View, TextInput, TouchableOpacity, ScrollView, Switch } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { useState } from 'react';
@@ -14,6 +14,8 @@ export default function AddPartyForm() {
     const [gstopen, setGstOpen] = useState(false);
     const [value, setValue] = useState(null);
     const [state, setState] = useState(null)
+    const [isEnabled, setIsEnabled] = useState(false);
+    const toggleSwitch = () => setIsEnabled(previousState => !previousState);
     const states = [
         { label: 'Andhra Pradesh', value: 'andhra_pradesh' },
         { label: 'Arunachal Pradesh', value: 'arunachal_pradesh' },
@@ -68,13 +70,13 @@ export default function AddPartyForm() {
     const [phoneNo, setPhone] = useState('');
     const [email, setEmail] = useState('');
     const [add, setAdd] = useState('');
-    const [openingBalance, setOpeningBalance] = useState(0);
+    const [openingBalance, setOpeningBalance] = useState(null);
     const [asDate, setAsDate] = useState('');
     const [addF1, setAddF1] = useState('');
     const [addF2, setAddF2] = useState('');
     const [addF3, setAddF3] = useState('');
     const [creditLimit, setCreditLimit] = useState(0);
-
+    const [balanceType, setBalanceType] = useState(null);
     // Function to capture and log the input data
     function addData() {
         if (
@@ -91,6 +93,7 @@ export default function AddPartyForm() {
             alert("Please fill the data")
             return
         }
+        if(isEnabled) setOpeningBalance(-openingBalance);
         console.log('Party Name:', partyName);
         console.log('GSTIN:', GSTIN);
         console.log('Phone No:', phoneNo);
@@ -269,14 +272,36 @@ export default function AddPartyForm() {
                             height: 48,
                             borderRadius: 10,
                             paddingHorizontal: 14,
-                            marginVertical: 10,
+                            
+                            marginTop: 10,
+                            marginBo:6
                         }}
                         keyboardType="numeric"
                         placeholder="Opening balance"
                         placeholderTextColor="gray"
                         value={openingBalance}
                         onChangeText={setOpeningBalance}
-                    />
+                    /> 
+                    {openingBalance !== null ?
+                        (
+                        <View style={{
+                        paddingHorizontal: 12,
+                        flexDirection: 'row',
+                        justifyContent: 'space-evenly',
+                        marginBottom: 10,
+                        marginTop:6
+                    }}>
+                    <Text>To Pay</Text>  
+                    <Switch
+          trackColor={{false: '#767577', true: '#81b0ff'}}
+          thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
+          ios_backgroundColor="#3e3e3e"
+          onValueChange={toggleSwitch}
+          value={isEnabled}
+        />
+                    <Text>To Receive</Text>   
+                    </View>): null}
+                    
 
                     <DropDownPicker
                         open={gstopen}
@@ -286,7 +311,7 @@ export default function AddPartyForm() {
                         setValue={setGstCategory}
                         placeholder="GST Category"
                         containerStyle={{ width: '100%' }}
-                        style={{ backgroundColor: 'white', zIndex: 1000 }}
+                        style={{ backgroundColor: 'white', zIndex: 1000, marginTop: 10 }}
                         dropDownContainerStyle={{
                             backgroundColor: 'white',
                         }}

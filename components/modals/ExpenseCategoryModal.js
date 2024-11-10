@@ -2,10 +2,28 @@ import React, { useState } from 'react';
 import { Alert, Modal, StyleSheet, Text, Pressable, View, TextInput } from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import DropDownPicker from 'react-native-dropdown-picker';
-
-const ExpenseCategoryModal = ({ modalVisible, setModalVisible, dataType, categoryName, setCategoryName, categoryType, setCategoryType }) => {
+import { useGlobalState } from '../providers/GlobalStateProvider';
+const ExpenseCategoryModal = ({ modalVisible, setModalVisible }) => {
   const [open, setOpen] = useState(false);
-
+  const expenseType = [
+    { label: 'Direct Expense', value: 'Direct Expense' },
+    { label: 'Indirect Expense', value: 'Indirect Expense' },
+  ];
+  const [value, setValue] = useState();
+  const {data, updateData} = useGlobalState()
+  const [categoryName, setCategoryName] = useState()
+  function hanleSubmit() {
+    const newData = {
+      name: categoryName || "",
+      type: value || ""
+    }
+    let newDa = data
+    newDa.data.expenseCategory
+      ? newDa.data.expenseCategory.push(newData)
+      : (newDa.data.expenseCategory = [newData]);
+    updateData(newDa, data.data.uid)
+    setModalVisible(!modalVisible)
+  }
   return (
     <View style={styles.centeredView}>
       <Modal
@@ -36,18 +54,18 @@ const ExpenseCategoryModal = ({ modalVisible, setModalVisible, dataType, categor
             
             <DropDownPicker
               open={open}
-              value={categoryType}
-              items={dataType}
+              value={value}
+              items={expenseType}
               setOpen={setOpen}
-              setValue={setCategoryType}
-              placeholder={categoryType ? categoryType : 'Select Category Type'}
+              setValue={setValue}
+              placeholder={value ? value : 'Select Category Type'}
               containerStyle={styles.dropdownContainer}
               style={styles.dropdownStyle}
               dropDownContainerStyle={styles.dropdownContainerStyle}
             />
             <Pressable
               style={[styles.button, styles.buttonClose]}
-              onPress={() => setModalVisible(!modalVisible)}>
+              onPress={hanleSubmit}>
               <Text style={styles.textStyle}>Submit</Text>
             </Pressable>
           </View>

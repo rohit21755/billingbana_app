@@ -1,5 +1,6 @@
 import { useContext, createContext, useState } from "react";
-
+// import { useRoute } from "@react-navigation/native";
+import { useNavigation } from '@react-navigation/native';
 const GlobalState = createContext();
 export function GlobalStateProvider({children}){
     const [data, setData] = useState();

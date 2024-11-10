@@ -1,56 +1,33 @@
 import React, { useState, useEffect } from 'react';
 import { Alert, Modal, StyleSheet, Text, Pressable, View, TextInput } from 'react-native';
+import { useGlobalState } from '../providers/GlobalStateProvider';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import DropDownPicker from 'react-native-dropdown-picker';
-export default function AddItemExModal({ modalVisible, setModalVisible, rows, setRows, itemdata, totalAmount, setTotalAmount }) {
-    const [item, setItem] = useState('');
-    const [qty, setQty] = useState(1);
-    const [price, setPrice] = useState(0.00);
-    const [amount, setAmount] = useState(0.00);
-    const [open, setOpen] = useState(false)
-    const [value, setValue] = useState()
-    // Update the amount when qty or price changes
-    useEffect(() => {
-        setAmount(qty * price);
-        setTotalAmount(totalAmount + qty * price)
-    }, [qty, price]);
-    useEffect(()=>{
-      handleSetItem()
-    },[value])
-    function handleSetItem(){
-
-        console.log("Selected item:", value);
-        if(value){
-        setItem(value.name);
-        setPrice(value.price)
+export default function AddExpenseItem({modalVisible, setModalVisible}){
+    const [name, setName] = useState("")
+    const [price, setPrice] = useState(0)
+    const { data , updateData } = useGlobalState("")
+    let isFormValid = name.trim() !== "" && price>0;
+    function handleAddRow(x){
+        const newData = {
+            name: name || "",
+            price: price || 0,
         }
-        // setItem(value); // Update the item state with the selected value
-    
-    }
-    function handleAddRow(closeAfterAdd) {
-        setRows(prevRows => [
-            ...prevRows,
-            {
-                index: prevRows.length+1,
-                item: item,
-                qty: qty,
-                price: price,
-                amount: amount,
-            },
-        ]);
-        reset();
-        if (closeAfterAdd) {
-            setModalVisible(!modalVisible);
-        }
-    }
+        let newDa = data
+        newDa.data.expenseItem
+      ? newDa.data.expenseItem.push(newData)
+      : (newDa.data.expenseItem = [newData]);
+        console.log(newData)
+        console.log(newDa.data.expenseItem)
+      updateData(newDa, data.data.uid);
+      if(x){
+        setModalVisible(!modalVisible)
+      }
+      else{
+        setName("");
+        setPrice(0)
+      }
 
-    function reset() {
-        setItem('');
-        setAmount(0.00);
-        setPrice(0.00);
-        setQty(1);
     }
-
     return (
         <View style={styles.centeredView}>
           <Modal
@@ -69,48 +46,27 @@ export default function AddItemExModal({ modalVisible, setModalVisible, rows, se
                     <AntDesign name="close" size={20} color="black" />
                   </Pressable>
                 </View>
-                <DropDownPicker
-          open={open}
-          value={item}
-          items={itemdata}
-          setOpen={setOpen}
-          setValue={setValue}
-
-          placeholder={item || "Item name"}
-          containerStyle={{ width: '100%' }}
-          style={{ backgroundColor: 'white', zIndex: 1000, marginTop: 10 }}
-          dropDownContainerStyle={{
-            backgroundColor: 'white',
-            zIndex: 2000, 
-          }}
-        />
+                
                 
                 <TextInput
                   style={styles.inputStyle}
-                  placeholder="Quantity"
+                  placeholder="Item Name"
                   placeholderTextColor="gray"
-                  onChangeText={(value) => setQty(parseInt(value) || 0)}
-                  keyboardType="numeric"
-                  value={qty.toString()}
+                  onChangeText={setName}
+                  value={name}
+                  
                 />
                 
                 <TextInput
                   style={styles.inputStyle}
                   placeholder="Price"
                   placeholderTextColor="gray"
-                  onChangeText={(value) => setPrice(parseFloat(value) || 0)}
+                  onChangeText={(value) => setPrice(value || 0)}
                   keyboardType="numeric"
-                  value={price.toString()}
+                  value={price}
                 />
                 
-                <TextInput
-                  style={styles.inputStyle}
-                  placeholder="Amount"
-                  placeholderTextColor="gray"
-                  editable={false}
-                  value={amount.toString()}
-                />
-
+               
                 <Pressable
                   style={[styles.button, styles.buttonClose]}
                   onPress={() => handleAddRow(false)}>
@@ -129,6 +85,7 @@ export default function AddItemExModal({ modalVisible, setModalVisible, rows, se
         </View>
       );
 }
+
 
 const styles = StyleSheet.create({
     centeredView: {

@@ -3,6 +3,7 @@ import AntDesign from '@expo/vector-icons/AntDesign'; //user
 import EvilIcons from '@expo/vector-icons/EvilIcons'; // location
 import { useNavigation } from '@react-navigation/native';
 import Home from '../components/bottom/Home';
+import Accordion from '../components/Accordin';
 export default function Profile() {
     const navigation = useNavigation()
     return<>
@@ -58,11 +59,43 @@ export default function Profile() {
             color: 'gray'
         }}>Reports.Staff</Text>
     </View>
-    <TouchableOpacity onPress={()=>navigation.navigate('paymentin')}><Text>PayemtnIn</Text></TouchableOpacity>
-    <TouchableOpacity onPress={()=>navigation.navigate('paymentout')}><Text>PayemtnOut</Text></TouchableOpacity>
-    <TouchableOpacity onPress={()=>navigation.navigate('addpurchaseform')}><Text>Add Purchase</Text></TouchableOpacity>
-    <TouchableOpacity onPress={()=>navigation.navigate('addexpense')}><Text>Add Expense</Text></TouchableOpacity>
     
+    <TouchableOpacity ><Text>Add Purchase</Text></TouchableOpacity>
+    <TouchableOpacity ><Text>Add Expense</Text></TouchableOpacity>
+    <Accordion title="Payments">
+    <TouchableOpacity style={{
+        padding: 4,
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    }} onPress={()=>navigation.navigate('paymentin')}><Text style={{
+        fontSize: 16
+    }}>PayemtnIn</Text>
+    <AntDesign name="rightcircleo" size={16} color="black" /></TouchableOpacity>
+    <TouchableOpacity style={{
+        padding: 4,
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    }} onPress={()=>navigation.navigate('paymentout')}><Text style={{
+        fontSize: 16
+    }}>PayemtnOut</Text><AntDesign name="rightcircleo" size={16} color="black" /></TouchableOpacity>
+    </Accordion>
+    <Accordion title="Purchases">
+    <TouchableOpacity style={{
+        padding: 4,
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    }} onPress={()=>navigation.navigate('addpurchaseform')}><Text style={{
+        fontSize: 16
+    }}>Add Purchase</Text>
+    <AntDesign name="rightcircleo" size={16} color="black" /></TouchableOpacity>
+    <TouchableOpacity style={{
+        padding: 4,
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    }} onPress={()=>navigation.navigate('addexpense')}><Text style={{
+        fontSize: 16
+    }}>Add Expense</Text><AntDesign name="rightcircleo" size={16} color="black" /></TouchableOpacity>
+    </Accordion>
 
 
     </View>

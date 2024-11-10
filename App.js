@@ -41,13 +41,15 @@ export default function App() {
 
   return (
     <GestureHandlerRootView style={{flex: 1}}>
-    <GlobalStateProvider>
+    
     <SafeAreaView style={{ flex: 1 }}>
       <NavigationContainer>
+      <GlobalStateProvider>
         <AppNavigator />
+        </GlobalStateProvider>
       </NavigationContainer>
       </SafeAreaView>
-    </GlobalStateProvider>
+    
     </GestureHandlerRootView>
   );
 }
