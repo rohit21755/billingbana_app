@@ -4,6 +4,11 @@ import {Alert, Modal, StyleSheet, Text, Pressable, View} from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 const SaleTypeModal = ({modalVisible, setModalVisible, saleTypes, saleType, setSaleType}) => {
     const [open, setOpen] = useState(false)
+    const [sale, setSale] = useState()
+    function submit(){
+      setSaleType(sale)
+      setModalVisible(!modalVisible)
+    }
   return (
     <View style={styles.centeredView}>
       <Modal
@@ -20,13 +25,13 @@ const SaleTypeModal = ({modalVisible, setModalVisible, saleTypes, saleType, setS
             <DropDownPicker
                     
                         open={open}
-                        value={saleType}
+                        value={sale}
                         items={saleTypes}
                         setOpen={setOpen} 
                         zIndex={5000}
-                        setValue={setSaleType} 
+                        setValue={setSale} 
                         // setItems={setItems}
-                        placeholder={saleType ? saleType : 'Select Type of Sale'}
+                        placeholder={sale ? sale : 'Select Type of Sale'}
                         containerStyle={{ width: '100%' }}
                         style={{ backgroundColor: '#fafafa' }}
                         dropDownContainerStyle={{
@@ -35,7 +40,7 @@ const SaleTypeModal = ({modalVisible, setModalVisible, saleTypes, saleType, setS
                     />
             <Pressable
               style={[styles.button, styles.buttonClose]}
-              onPress={() => setModalVisible(!modalVisible)}>
+              onPress={submit}>
               <Text style={styles.textStyle}>Submit</Text>
             </Pressable>
           </View>

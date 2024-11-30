@@ -18,6 +18,7 @@ import SaleTypeModal from '../../components/modals/sale/SaleTypeModal';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import CartModal from '../../components/modals/sale/CartModal';
 import { useCart } from '../../components/providers/CartProvider';
+import axios from 'axios';
 export default function AddSaleForm() {
     const { cart, setCart } = useCart();
     useEffect(()=>{
@@ -33,7 +34,7 @@ export default function AddSaleForm() {
     // packaging detials modal
     const [packageModal, setPackageModal] = useState(false)
     // extracting the rows 
-    const { setRows2, rows2, rows, setRows, totalPrice, setTotalPrice} = useGlobalState()
+    const { setRows2, rows2, rows, setRows, totalPrice, setTotalPrice, draft} = useGlobalState()
     
     
     const states = [
@@ -98,6 +99,7 @@ export default function AddSaleForm() {
         state: '',
         isDone: ''
     })
+    const [updatePayload, setUpdatePayload] = useState({});
     const [stateOpen, setStateOpen] = useState(false); 
     const [selectedState, setSelectedState] = useState(null);
     const paymentTypes = [
@@ -111,7 +113,7 @@ export default function AddSaleForm() {
     const [desc, setDesc] = useState('')
     const [paid, setPaid] = useState(0)
     const [profit, setProfit] = useState(0)
-    const [saleType, setSaleType] = useState() 
+    const [saleType, setSaleType] = useState(null) 
     const [saleTypeModal, setSaleTypeModal] = useState(false)
     const [allValuesSet, setAllValuesSet] = useState({
         saleType: false,
@@ -122,6 +124,9 @@ export default function AddSaleForm() {
     });
     const [billingAddress, setBillingAddress] = useState()
     const [shippingAddress, setShippingAddress] = useState()
+    const [index, setIndex] = useState(0)
+    const [transfer, setTransfer] = useState(null)
+    const [saleType2, setSaleType2] = useState(false)
     // const [checkSaleType, setCheckSaleType] = use
     useEffect(()=>{
         createPartyData()
@@ -135,6 +140,8 @@ export default function AddSaleForm() {
     },[])
     
     
+
+        
     function generateInvoiceNumber() {
         const existing = new Set(data?.data.Transactions.map(item => item.invoice_number));
         let invoice;
@@ -152,15 +159,93 @@ export default function AddSaleForm() {
             setPartyData(partyData1);
         }
     }
+    const [socket, setSocket] = useState(null);
+    useEffect(() => {
+
+        const ws = new WebSocket("ws://bb-websockets.onrender.com");
+
+        ws.onopen = () => {
+            console.log("WebSocket connection established");
+        };
+
+        ws.onclose = () => {
+            console.log("WebSocket connection closed");
+        };
+
+        ws.onmessage = (event) => {
+            console.log("Message from server:", event.data);
+        };
+
+   
+        setSocket(ws);
+
+       
+        return () => {
+            ws.close();
+        };
+    }, []);
+    const sendUpdateToServer = (updatedKey, updatedValue) => {
+        if (!socket || socket.readyState !== WebSocket.OPEN) {
+            console.error("WebSocket is not connected. Cannot send data.");
+            return;
+        }
+
+        const payload = {
+            ...updatePayload,
+            [updatedKey]: updatedValue,
+        };
+        let newPayload
+        if(updatedKey === 'saleType' && !saleType2){
+            newPayload = {
+                type: "ADD_TRANSACTION",
+                uid: data?.data.uid,
+                transaction: {
+                  saleType: updatedValue,
+                }
+              }
+              setSaleType2(true)
+              
+        }
+        else {
+            newPayload = {
+                type: "UPDATE_TRANSACTION",
+                uid: data?.data.uid,
+                index: draft === 0 ? 0 : draft,
+                updatedTransaction: payload,
+            };
+        }
+        
+
+        setUpdatePayload(payload);
+
+        socket.send(JSON.stringify(newPayload));
+        console.log("Payload sent to server:", newPayload);
+    };
+
+    function handleSaleType(t){
+        console.log(t)
+        setSaleType(t)
+        sendUpdateToServer('saleType', t)
+
+    }
     const handlePartyChange = (selectedParty) => {
-        console.log("party selected")
+     
         if (selectedParty) {
             setParty(selectedParty); 
         }
         setPartyModal(false)
+        sendUpdateToServer('party', selectedParty)
     };
+    function handleDateandInvoice(d) {
+
+
+        setInvoiceDate(d)
+        sendUpdateToServer('invoice_number', invoice_number)
+        sendUpdateToServer('invoice_date', d)
+
+    }
     function formatDate(s) {
-        console.log(s)
+
         const dateObj = new Date(s);
         const year = dateObj.getFullYear();
         const month = String(dateObj.getMonth() + 1).padStart(2, '0');  
@@ -177,7 +262,6 @@ export default function AddSaleForm() {
         handleTaxes()
     },[totalTax])
     function handleTaxes () {
-        console.log("Gst selected :)")
     }
     const handleStateChange = () => {
         setStateOfSupply({ isDone : false, state: selectedState }); 
@@ -300,14 +384,14 @@ export default function AddSaleForm() {
           };
           
 
-          console.log(newData)
+   
 
           let newDa = data
           newDa.data.Transactions
       ? newDa.data.Transactions.push(newData)
       : (newDa.data.Transactions = [newData]);
     newDa.data.sales ? newDa.data.sales.push(newData) : (newDa.data.sales = [newData]);
-    console.log(newDa.data.Transactions)
+
     updateData(newDa, data?.data.uid)
     resetForm()
     
@@ -364,18 +448,18 @@ export default function AddSaleForm() {
             ? (party.credit += parseFloat(newData.pending))
             : (party.credit = parseFloat(newData.pending));
     } else {
-        console.log("CASH IN HAND INCREASED");
+      
         newDa.data.cash_in_hands
             ? (newDa.data.cash_in_hands += parseFloat(newData.total))
             : (newDa.data.cash_in_hands = parseFloat(newData.total));
-        console.log(newDa.data);
+  
     }
     
     newDa.data.total_sales
         ? (newDa.data.total_sales += parseFloat(newData.total))
         : (newDa.data.total_sales = parseFloat(newData.total));
     
-    console.log(newDa.data.Transactions);
+
 
 
     
@@ -403,16 +487,16 @@ export default function AddSaleForm() {
         console.log(saleType)
     },[saleType])
     function handleModals(s) {
-        console.log(s)
+ 
         if (s === 'Sale Type') {
-            console.log('inside if')
+          
             setSaleTypeModal(!saleTypeModal);
         } else {
-            console.log('inside else')
+           
             setSaleTypeModal(false);
             
             if (!saleType) {
-                console.log('inside eles id')
+              
                 alert('Please select Sale type');
                 return;
             }
@@ -427,7 +511,7 @@ export default function AddSaleForm() {
     }
     
     function renderCart(){
-        console.log('ho')
+      
         navigation.navigate('saleitem', {
             type: saleType
         })
@@ -611,10 +695,10 @@ export default function AddSaleForm() {
     
             {/* Modals */}
             <PartyModal modalVisible={partymodal} setModalVisible={setPartyModal} value={value} partyData={partyData} handlePartyChange={handlePartyChange} party={party} />
-            <InvoiceModal modalVisible={invoicemodal} setModalVisible={setInvoiceModal} invoice_number={invoice_number} setInvoiceNumer={setInvoiceNumer} invoice_date={invoice_date} setInvoiceDate={setInvoiceDate} open2={open2} setOpen2={setOpen2} />
+            <InvoiceModal modalVisible={invoicemodal} setModalVisible={setInvoiceModal}   open2={open2} setOpen2={setOpen2} handleSubmit={handleDateandInvoice} invoice_number={invoice_number} setInvoiceNumer={setInvoiceNumer} />
             <PaymentModal modalVisible={paymentModal} setModalVisible={setPaymentModal} saleType={saleType} setBillingAddress={setBillingAddress} selectedPaymentType={selectedPaymentType} paymentTypes={paymentTypes} setSelectedPaymentType={setSelectedPaymentType} setRoundOff={setRoundOff} taxes={taxes} totalTax={totalTax} setTotalTax={setTotalTax} setPaid={setPaid} />
             <PackageModal modalVisible={packageModal} setModalVisible={setPackageModal} saleType={saleType} setShippingAddress={setShippingAddress} selectedState={selectedState} setSelectedState={setSelectedState} state_of_supply={state_of_supply} states={states} />
-            <SaleTypeModal modalVisible={saleTypeModal} setModalVisible={setSaleTypeModal} saleTypes={saleTypes} saleType={saleType} setSaleType={setSaleType}/>
+            <SaleTypeModal modalVisible={saleTypeModal} setModalVisible={setSaleTypeModal} saleTypes={saleTypes} saleType={saleType} setSaleType={handleSaleType}/>
             <CartModal modalVisible={cart} setModalVisible={setCart} rows={rows}/>
         </>
     );

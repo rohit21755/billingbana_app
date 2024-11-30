@@ -1,6 +1,7 @@
 import { useContext, createContext, useState } from "react";
 // import { useRoute } from "@react-navigation/native";
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
 const GlobalState = createContext();
 export function GlobalStateProvider({children}){
     const [data, setData] = useState();
@@ -8,6 +9,7 @@ export function GlobalStateProvider({children}){
     const [Uin, setUin] = useState(false);
     const [time, setTime] = useState()
     const [totalPrice, setTotalPrice] = useState();
+    const [draft, setDraft] = useState();
     const [rows, setRows] = useState([
         {
           index: 0,
@@ -51,11 +53,11 @@ export function GlobalStateProvider({children}){
     
    
       async function fetchData(newUid) {
-        console.log('fetching data for user', newUid)
+      
         
         
         try {
-            console.log("fetching data for user")
+          
             const response = await fetch('https://api-bilingbaba.onrender.com/get_user', {
                 method: "GET",
                 headers: {
@@ -67,12 +69,13 @@ export function GlobalStateProvider({children}){
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
+
     
             const data2 = await response.json();
-            console.log(data2)
+    
             setTime(formatDate())
             setUin(true)
-            console.log("time",time);
+
             setData(data2)
             
             
@@ -81,10 +84,17 @@ export function GlobalStateProvider({children}){
         } catch (error) {
             console.error("Error fetching or processing data:", error);
         }
+        try {
+            const response = await axios.get(`https://bb-websockets.onrender.com/api/accounts/vvYfl26Dh1SJXKzZeedwLRm93FB3`);
+           
+            setDraft(response.data.transactionsLength)
+        }
+        catch (error) {
+            console.error("Error fetching or processing data:", error);
+        }
     }
     async function updateData(newdata2, newUid2){
-        console.log('hello from update data')
-        console.log(newdata2.data, newUid2)
+
     
     
         try {
@@ -120,7 +130,7 @@ export function GlobalStateProvider({children}){
         
     }
     return <>
-    <GlobalState.Provider value={{ data, fetchData, updateData, setUin, Uin, time, setRows, rows, totalPrice, setTotalPrice, rows2, setRows2}}>
+    <GlobalState.Provider value={{ data, fetchData, updateData, setUin, Uin, time, setRows, rows, totalPrice, setTotalPrice, rows2, setRows2, draft}}>
         {children}
     </GlobalState.Provider>
     </>

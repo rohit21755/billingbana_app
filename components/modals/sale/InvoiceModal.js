@@ -2,8 +2,14 @@ import React, {useState} from 'react';
 import {Alert, Modal, StyleSheet, Text, Pressable, View, TouchableOpacity, TextInput} from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import DropDownPicker from 'react-native-dropdown-picker';
-const InvoiceModal = ({modalVisible, setModalVisible, invoice_number, setInvoiceNumer,invoice_date, open2,setOpen2, setInvoiceDate}) => {
+const InvoiceModal = ({modalVisible, setModalVisible, open2,setOpen2,  handleSubmit, invoice_number, setInvoiceNumer}) => {
     const [open, setOpen] = useState(false)
+    const [newDate, setNewDate] = useState(new Date())
+    const [newInvoice, setNewInvoice] = useState()
+    function submit(){
+      handleSubmit(newDate)
+      setModalVisible(!modalVisible)
+    }
     function formatDate(s) {
         console.log(s)
         const dateObj = new Date(s);
@@ -14,6 +20,7 @@ const InvoiceModal = ({modalVisible, setModalVisible, invoice_number, setInvoice
         return formattedDate
 
     }
+
   return (
     <View style={styles.centeredView}>
       <Modal
@@ -56,15 +63,15 @@ const InvoiceModal = ({modalVisible, setModalVisible, invoice_number, setInvoice
                                 color: 'black',
                                 fontSize: 15,
                                 
-                            }}>{formatDate(invoice_date)}</Text>
+                            }}>{formatDate(newDate)}</Text>
                         </TouchableOpacity>
                         <DatePicker
                         modal
                         open={open2}
-                        date={invoice_date}
+                        date={newDate}
                         onConfirm={(date) => {
                             setOpen2(false);
-                            setInvoiceDate(date)
+                            setNewDate(date)
                         }}
                         onCancel={() => {
                             setOpen2(false);
@@ -72,7 +79,7 @@ const InvoiceModal = ({modalVisible, setModalVisible, invoice_number, setInvoice
                     />
             <Pressable
               style={[styles.button, styles.buttonClose]}
-              onPress={() => setModalVisible(!modalVisible)}>
+              onPress={submit}>
               <Text style={styles.textStyle}>Submit</Text>
             </Pressable>
           </View>
