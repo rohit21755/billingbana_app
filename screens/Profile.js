@@ -97,6 +97,13 @@ export default function Profile() {
     }}>Add Expense</Text><AntDesign name="rightcircleo" size={16} color="black" /></TouchableOpacity>
     </Accordion>
 
+<TouchableOpacity style={{
+        padding: 4,
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    }} onPress={()=>navigation.navigate('drafttransactions')}><Text style={{
+        fontSize: 16
+    }}>Draft Transactions</Text><AntDesign name="rightcircleo" size={16} color="black" /></TouchableOpacity>
 
     </View>
     <Home navigation={navigation}/>

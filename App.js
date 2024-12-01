@@ -36,6 +36,7 @@ import AddExpenses from './screens/AddExpenses';
 import AddExpensesHeader from './components/headers/AddExpensesHeader';
 import { useState } from 'react';
 import { CartProvider } from './components/providers/CartProvider';
+import DraftTransactions from './screens/DraftTransactions';
 export default function App() {
   const Stack = createNativeStackNavigator();
 
@@ -99,6 +100,13 @@ function AppNavigator() {
           <Stack.Screen
             name="profile"
             component={Profile}
+            options={{
+              headerShown: false
+            }}
+          />
+          <Stack.Screen
+            name="drafttransactions"
+            component={DraftTransactions}
             options={{
               headerShown: false
             }}
