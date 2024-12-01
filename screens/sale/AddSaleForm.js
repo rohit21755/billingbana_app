@@ -34,8 +34,9 @@ export default function AddSaleForm() {
     // packaging detials modal
     const [packageModal, setPackageModal] = useState(false)
     // extracting the rows 
-    const { setRows2, rows2, rows, setRows, totalPrice, setTotalPrice, draft} = useGlobalState()
+    const { setRows2, rows2, rows, setRows, totalPrice, setTotalPrice, draft , draftSaleTransactions} = useGlobalState()
     
+    console.log("check at sale form",draftSaleTransactions)
     
     const states = [
         { label: 'Andhra Pradesh', value: 'Andhra Pradesh' },
@@ -86,7 +87,8 @@ export default function AddSaleForm() {
     const { data,updateData } = useGlobalState()
     
     const [value, setValue] = useState(null);
-    const [partyData, setPartyData] = useState()
+    const [partyData, setPartyData] = useState(
+    )
     const [date, setDate] = useState(new Date())
     const [open2, setOpen2] = useState(false)
     const [party, setParty] = useState({
@@ -113,7 +115,9 @@ export default function AddSaleForm() {
     const [desc, setDesc] = useState('')
     const [paid, setPaid] = useState(0)
     const [profit, setProfit] = useState(0)
-    const [saleType, setSaleType] = useState(null) 
+    const [saleType, setSaleType] = useState(
+        draftSaleTransactions ? draftSaleTransactions.saleType : null
+    ) 
     const [saleTypeModal, setSaleTypeModal] = useState(false)
     const [allValuesSet, setAllValuesSet] = useState({
         saleType: false,
@@ -127,7 +131,6 @@ export default function AddSaleForm() {
     const [index, setIndex] = useState(0)
     const [transfer, setTransfer] = useState(null)
     const [saleType2, setSaleType2] = useState(false)
-    // const [checkSaleType, setCheckSaleType] = use
     useEffect(()=>{
         createPartyData()
         setInvoiceNumer(generateInvoiceNumber())
@@ -138,6 +141,12 @@ export default function AddSaleForm() {
             generateInvoiceNumber()
         }
     },[])
+    useEffect(()=>{
+        if(draftSaleTransactions){
+            setSaleType(draftSaleTransactions.saleType)
+            sendUpdateToServer('saleType', draftSaleTransactions.saleType)
+        }
+    },[saleType])
     
     
 
@@ -267,7 +276,7 @@ export default function AddSaleForm() {
         setStateOfSupply({ isDone : false, state: selectedState }); 
     };
     
-    const handleSubmitEsitmation = () => { // for estimate
+    const handleSubmitEsitmation = () => { 
         const filteredRows = rows.filter(row => row.qty > 0);
         const newData = {
             name: party.name ? party.name : "",

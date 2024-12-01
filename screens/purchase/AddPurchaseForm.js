@@ -27,7 +27,7 @@ export default function AddPurchaseForm() {
     // packaging detials modal
     const [packageModal, setPackageModal] = useState(false)
     // extracting the rows 
-    const { setRows, rows, totalPrice, setTotalPrice} = useGlobalState()
+    const { setRows, rows, totalPrice, setTotalPrice,draft} = useGlobalState()
     
     
     const states = [
@@ -124,6 +124,69 @@ export default function AddPurchaseForm() {
             generateInvoiceNumber()
         }
     },[])
+    const [purchaseType2, setPurchaseType2] = useState(false)
+    const [socket, setSocket] = useState(null);
+    useEffect(() => {
+
+        const ws = new WebSocket("ws://bb-websockets.onrender.com");
+
+        ws.onopen = () => {
+            console.log("WebSocket connection established");
+        };
+
+        ws.onclose = () => {
+            console.log("WebSocket connection closed");
+        };
+
+        ws.onmessage = (event) => {
+            console.log("Message from server:", event.data);
+        };
+
+   
+        setSocket(ws);
+
+       
+        return () => {
+            ws.close();
+        };
+    }, []);
+    const sendUpdateToServer = (updatedKey, updatedValue) => {
+        if (!socket || socket.readyState !== WebSocket.OPEN) {
+            console.error("WebSocket is not connected. Cannot send data.");
+            return;
+        }
+
+        const payload = {
+            ...updatePayload,
+            [updatedKey]: updatedValue,
+        };
+        let newPayload
+        if(updatedKey === 'purchaseType' && !purchaseType2){
+            newPayload = {
+                type: "ADD_TRANSACTION",
+                uid: data?.data.uid,
+                transaction: {
+                  purchaseType: updatedValue,
+                }
+              }
+              setPurchaseType2(true)
+              
+        }
+        else {
+            newPayload = {
+                type: "UPDATE_TRANSACTION",
+                uid: data?.data.uid,
+                index: draft === 0 ? 0 : draft,
+                updatedTransaction: payload,
+            };
+        }
+        
+
+        setUpdatePayload(payload);
+
+        socket.send(JSON.stringify(newPayload));
+        console.log("Payload sent to server:", newPayload);
+    };
     
     
     function generateInvoiceNumber() {

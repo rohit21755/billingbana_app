@@ -2,11 +2,13 @@ import { View, Text, TouchableOpacity, Pressable, TextInput, ActivityIndicator }
 import { useState, useEffect } from 'react';
 import { useGlobalState } from '../components/providers/GlobalStateProvider';
 import axios from 'axios';
+import { useNavigation } from '@react-navigation/native';
 export default function DraftTransactions(
 ) {
-    const { data } = useGlobalState();
+    const { data, setDraftPurchaseTransactions, setDraftSaleTransactions } = useGlobalState();
     const [transactions, setTransactions] = useState([]);
     const [loading, setLoading] = useState(false)
+    const navigation = useNavigation()
     useEffect(()=>{
         getData()
     },[])
@@ -36,6 +38,27 @@ export default function DraftTransactions(
             console.log(error)
         })
     }
+    function handleEditTrsaction(ele, index){
+        console.log(ele)
+        if(ele.purchaseType === 'Purchase order' || ele.purchaseType === 'Purchase returns'){
+          
+            setDraftPurchaseTransactions(ele)
+            
+            navigation.navigate('addpurchaseform')
+            // deleteTransaction(index)
+            
+        }
+        else if (ele.saleType === 'Sales Order' || ele.saleType === 'Delievery Challan' || ele.saleType === 'Sales Returns' || ele.saleType === 'Sale' || ele.saleType === 'Estimate'){
+           
+            setDraftSaleTransactions(ele)
+            
+            navigation.navigate('addsaleform')
+            // deleteTransaction(index)
+        }
+        else {
+            alert('Invalid Transaction Type')
+        }
+    }
     return<>
     <View style={{
         paddingHorizontal: 16,
@@ -62,20 +85,20 @@ export default function DraftTransactions(
         padding: 16
     }}>
         {transactions.map((ele, index)=>{
-            return <View style={{
+            return <TouchableOpacity onPress={()=>handleEditTrsaction(ele, index)} style={{
                 borderWidth: 1,
                 borderColor: '#D9D9D9',
                 borderRadius: 10,
                 padding: 8,
                 marginBottom: 10
             }}>
-                <Text>{ele.saleType}</Text>
+                <Text>{ele.saleType || ele.purchaseType}</Text>
                 <Text>{ele.invoice_number}</Text>
                 <Text>{ele.invoice_date}</Text>
                 <TouchableOpacity style={{padding: 2, borderWidth: 1, borderColor: 'gray', borderRadius: 10, marginTop: 5, width: 47}} onPress={()=>deleteTransaction(index)}>
                     <Text>Delete</Text>
                 </TouchableOpacity>
-            </View>
+            </TouchableOpacity>
         })    
         }
         

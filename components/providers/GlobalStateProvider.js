@@ -10,6 +10,8 @@ export function GlobalStateProvider({children}){
     const [time, setTime] = useState()
     const [totalPrice, setTotalPrice] = useState();
     const [draft, setDraft] = useState();
+    const [draftSaleTransactions, setDraftSaleTransactions] = useState(null);
+    const [draftPurchaseTransactions, setDraftPurchaseTransactions] = useState(null);
     const [rows, setRows] = useState([
         {
           index: 0,
@@ -130,7 +132,7 @@ export function GlobalStateProvider({children}){
         
     }
     return <>
-    <GlobalState.Provider value={{ data, fetchData, updateData, setUin, Uin, time, setRows, rows, totalPrice, setTotalPrice, rows2, setRows2, draft}}>
+    <GlobalState.Provider value={{ data, fetchData, updateData, setUin, Uin, time, setRows, rows, totalPrice, setTotalPrice, rows2, setRows2, draft, draftPurchaseTransactions, setDraftPurchaseTransactions, draftSaleTransactions, setDraftSaleTransactions}}>
         {children}
     </GlobalState.Provider>
     </>
