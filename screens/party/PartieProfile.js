@@ -6,9 +6,25 @@ import Entypo from '@expo/vector-icons/Entypo';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import ProfileTransaction from '../../components/parties/ProfileTransaction';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { useGlobalState } from '../../components/providers/GlobalStateProvider';
+import { useEffect } from 'react';
 export default function PartieProfile(){
   const route = useRoute()
   console.log(route.params.profile)
+  const {data} = useGlobalState()
+  let transactions = []
+  useEffect(()=>{
+    setTrsactions()
+  },[])
+  function setTrsactions(){
+    if(data?.data.Transactions){
+      data.data.Transactions.map((t)=>{
+        console.log(t)
+        if(t.name === route.params.profile.partyName){
+          console.log(t)
+        }
+      })
+  }}
     return(<>
     <LinearGradient
       colors={['#FFFFFF', '#BAD8FF']}
@@ -175,7 +191,7 @@ export default function PartieProfile(){
         borderRadius: 8,
         borderColor: '#D9D9D9'
       }}>
-        <ProfileTransaction transactions = {route.params.profile.transactions}/>
+        <ProfileTransaction  transactions={transactions}/>
         
       </View>
       

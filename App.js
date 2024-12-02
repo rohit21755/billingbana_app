@@ -39,8 +39,10 @@ import { useState } from 'react';
 import { CartProvider } from './components/providers/CartProvider';
 import DraftTransactions from './screens/DraftTransactions';
 import SearchPartyScreen from './screens/party/SearchParty';
+import LoaderScreen from './screens/LoaderScreen';
 export default function App() {
   const Stack = createNativeStackNavigator();
+
 
   return (
     <GestureHandlerRootView style={{flex: 1}}>
@@ -60,8 +62,20 @@ export default function App() {
 }
 
 function AppNavigator() {
-  const { Uin } = useGlobalState();  // Correctly use the hook inside the provider
+  const { Uin, loading } = useGlobalState();  // Correctly use the hook inside the provider
   const Stack = createNativeStackNavigator();
+  if(loading){
+    return <>
+    <Stack.Navigator>
+      <Stack.Screen
+        name='loader'
+        component={LoaderScreen}
+        options={{
+          headerShown: false
+        }}
+      />
+      </Stack.Navigator></>
+  }
   return (
     <Stack.Navigator>
       {!Uin ? (

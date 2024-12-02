@@ -12,6 +12,7 @@ export function GlobalStateProvider({children}){
     const [draft, setDraft] = useState();
     const [draftSaleTransactions, setDraftSaleTransactions] = useState(null);
     const [draftPurchaseTransactions, setDraftPurchaseTransactions] = useState(null);
+    const [loading, setLoading] = useState(false);
     const [rows, setRows] = useState([
         {
           index: 0,
@@ -59,7 +60,7 @@ export function GlobalStateProvider({children}){
         
         
         try {
-          
+            setLoading(true)
             const response = await fetch('https://api-bilingbaba.onrender.com/get_user', {
                 method: "GET",
                 headers: {
@@ -86,17 +87,10 @@ export function GlobalStateProvider({children}){
         } catch (error) {
             console.error("Error fetching or processing data:", error);
         }
-        try {
-            const response = await axios.get(`https://bb-websockets.onrender.com/api/accounts/vvYfl26Dh1SJXKzZeedwLRm93FB3`);
-           
-            setDraft(response.data.transactionsLength)
-        }
-        catch (error) {
-            console.error("Error fetching or processing data:", error);
-        }
+        setLoading(false)
     }
     async function updateData(newdata2, newUid2){
-
+        setLoading(true)
     
     
         try {
@@ -128,11 +122,12 @@ export function GlobalStateProvider({children}){
             console.error("Error updating data:", error);
             alert("Unable to save to remote server");
         }
+        setLoading(false)
     
         
     }
     return <>
-    <GlobalState.Provider value={{ data, fetchData, updateData, setUin, Uin, time, setRows, rows, totalPrice, setTotalPrice, rows2, setRows2, draft, draftPurchaseTransactions, setDraftPurchaseTransactions, draftSaleTransactions, setDraftSaleTransactions}}>
+    <GlobalState.Provider value={{ data, fetchData, updateData, setUin, Uin, time, setRows, rows, totalPrice, setTotalPrice, rows2, setRows2, draft, draftPurchaseTransactions, setDraftPurchaseTransactions, draftSaleTransactions, setDraftSaleTransactions, loading}}>
         {children}
     </GlobalState.Provider>
     </>

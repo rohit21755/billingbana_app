@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity,ScrollView } from 'react-native';
 
 export default function ProfileTransaction({transactions}) {
     const [selected, setSelected] = useState('all');
-    console.log('profile Transactions',transactions)
+    console.log('profile Transactions',transactions.length)
     function handleChange(s) {
         setSelected(s);
     }
@@ -81,8 +81,9 @@ export default function ProfileTransaction({transactions}) {
                     padding: 6,
                     
                 }}>
-                    
-                    <View style={{
+                    {transactions.map((transaction, index)=>{
+                        return<>
+                        <View style={{
                         borderRadius: 8,
                         backgroundColor: '#BAD8FF',
                         padding: 6,
@@ -142,6 +143,9 @@ export default function ProfileTransaction({transactions}) {
                             
                         </View>
                     </View>
+                        </>
+                    })}
+                    
 
                 </ScrollView>
         </>

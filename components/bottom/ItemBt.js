@@ -2,6 +2,7 @@ import Entypo from '@expo/vector-icons/Entypo';
 import {View, Text, TouchableOpacity} from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import AntDesign from '@expo/vector-icons/AntDesign';
 export default function ItemBt(){
     const navigation = useNavigation()
     return<>
@@ -37,7 +38,17 @@ export default function ItemBt(){
             alignContent: 'center',
             alignItems: 'center'
         }} onPress={()=> navigation.navigate('additem')}>
-        <Entypo name="circle-with-plus" size={24} color="#318AFE" />
+            {/* <View style={{
+                backgroundColor: 'white',
+                borderRadius: 100,
+               
+            }}> */}
+                <AntDesign name="pluscircle" size={24} color="#0C2D79" style={{
+                    backgroundColor: 'white',
+                    borderRadius: 28,
+                }} />
+            {/* </View> */}
+        
         <Text style={
             {
                 color: 'white',
@@ -45,7 +56,7 @@ export default function ItemBt(){
             }
         }>ADD ITEMS</Text>
         </TouchableOpacity>
-        <View style={{
+        <TouchableOpacity onPress={()=>navigation.navigate('stock')} style={{
             backgroundColor: 'white',
             borderRadius: 24,
             flexDirection: 'row',
@@ -59,7 +70,7 @@ export default function ItemBt(){
             <Text style={{
                 fontSize: 16
             }}>Report</Text>
-        </View>
+        </TouchableOpacity>
         
 
       </View>

@@ -10,9 +10,11 @@ export default function Stock(){
     }}>
         <View style={{
             padding: 12,
-            borderWidth: 2,
+            borderWidth: 1,
+            borderColor: 'gray',
             alignItems: 'center',
-            width: '45%'
+            width: '45%',
+            
         }}>
             <Text>Low Stock</Text>
             <Text>0</Text>
@@ -20,9 +22,10 @@ export default function Stock(){
         </View>
         <View style={{
             padding: 12,
-            borderWidth: 2,
+            borderWidth: 1,
+            borderColor: 'gray',
             alignItems: 'center',
-            width: '45%'
+            width: '45%',
         }}>
             <Text>Low Stock</Text>
             <Text>0</Text>

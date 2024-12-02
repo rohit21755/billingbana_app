@@ -61,26 +61,7 @@ export default function AllItems(){
                             <Text style={{
                                 color: '#ED4135'
                             }}>{item.discount}% OFF</Text></View>
-                            <View style={{
-                                borderRadius: 5,
-                                marginLeft: 32,
-                                flexDirection: 'row',
-                                gap:6,
-                                marginTop: 4,
-                                borderWidth: 1,
-                                paddingHorizontal: 3,
-                                backgroundColor: 'white'
-                            }}>
-                                <TouchableOpacity style={{
-                                    borderRightWidth: 1,
-                                    paddingHorizontal: 5
-                                }}><Text>-</Text></TouchableOpacity>
-                                <View><Text>1</Text></View>
-                                <TouchableOpacity style={{
-                                    borderLeftWidth: 1,
-                                    paddingHorizontal: 5
-                                }}><Text>+</Text></TouchableOpacity>
-                            </View>
+                            
                         </View>
                     </View>
         
