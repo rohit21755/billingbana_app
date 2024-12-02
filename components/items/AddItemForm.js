@@ -94,7 +94,7 @@ export default function AddItemForm(){
         let newDa = data;
         newDa.data.items ? newDa.data.items.push(newData) : (newDa.data.items = [newData]);
         updateData(newDa, data.data.uid)
-        // console.log(data);
+    
         // let newDa = data;
         // newDa.items ? newDa.items.push(newData) : (newDa.items = [newData]);
         // console.log(newDa);

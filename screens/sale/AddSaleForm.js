@@ -34,9 +34,8 @@ export default function AddSaleForm() {
     // packaging detials modal
     const [packageModal, setPackageModal] = useState(false)
     // extracting the rows 
-    const { setRows2, rows2, rows, setRows, totalPrice, setTotalPrice, draft , draftSaleTransactions} = useGlobalState()
-    
-    console.log("check at sale form",draftSaleTransactions)
+    const { setRows2, rows2, rows, setRows, totalPrice, setTotalPrice, draft} = useGlobalState()
+
     
     const states = [
         { label: 'Andhra Pradesh', value: 'Andhra Pradesh' },
@@ -116,7 +115,7 @@ export default function AddSaleForm() {
     const [paid, setPaid] = useState(0)
     const [profit, setProfit] = useState(0)
     const [saleType, setSaleType] = useState(
-        draftSaleTransactions ? draftSaleTransactions.saleType : null
+        null
     ) 
     const [saleTypeModal, setSaleTypeModal] = useState(false)
     const [allValuesSet, setAllValuesSet] = useState({
@@ -141,12 +140,7 @@ export default function AddSaleForm() {
             generateInvoiceNumber()
         }
     },[])
-    useEffect(()=>{
-        if(draftSaleTransactions){
-            setSaleType(draftSaleTransactions.saleType)
-            sendUpdateToServer('saleType', draftSaleTransactions.saleType)
-        }
-    },[saleType])
+
     
     
 

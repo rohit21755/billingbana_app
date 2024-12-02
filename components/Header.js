@@ -8,7 +8,6 @@ import { useGlobalState } from './providers/GlobalStateProvider';
 export default function Header() {
     const navigation = useNavigation();
     const { data } = useGlobalState()
-    console.log(data)
     return(<>
     <LinearGradient 
     colors={['rgba(186, 216, 255, 1)', 'rgba(255, 255, 255, 1)']}
@@ -38,7 +37,7 @@ export default function Header() {
             gap:8,
 
         }}>
-            <TouchableOpacity><Entypo name="magnifying-glass" size={24} color="black" /></TouchableOpacity>
+            <TouchableOpacity onPress={()=>navigation.navigate('Search')}><Entypo name="magnifying-glass" size={24} color="black" /></TouchableOpacity>
             <TouchableOpacity><Entypo name="message" size={24} color="black" /></TouchableOpacity>
         </View>
         

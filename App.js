@@ -28,6 +28,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useGlobalState, GlobalStateProvider } from './components/providers/GlobalStateProvider';
 // import AddSaleForm from './screens/sale/AddSaleForm'; 
 import PaymentInHeader from './components/headers/PaymentInHeader';
+import SearchScreen from './screens/Search';
 import PaymentIn from './screens/sale/PaymentIn';
 import PaymentOut from './screens/purchase/PaymentOut';
 import AddPurchaseForm from './screens/purchase/AddPurchaseForm';
@@ -37,6 +38,7 @@ import AddExpensesHeader from './components/headers/AddExpensesHeader';
 import { useState } from 'react';
 import { CartProvider } from './components/providers/CartProvider';
 import DraftTransactions from './screens/DraftTransactions';
+import SearchPartyScreen from './screens/party/SearchParty';
 export default function App() {
   const Stack = createNativeStackNavigator();
 
@@ -58,8 +60,7 @@ export default function App() {
 }
 
 function AppNavigator() {
-  const { Uin } = useGlobalState(); 
-  console.log(Uin) // Correctly use the hook inside the provider
+  const { Uin } = useGlobalState();  // Correctly use the hook inside the provider
   const Stack = createNativeStackNavigator();
   return (
     <Stack.Navigator>
@@ -81,15 +82,26 @@ function AppNavigator() {
               header: () => <Header />,
             }}
           />
+          <Stack.Screen
+            name="Search"
+            component={SearchScreen}
+            options={{
+              headerShown: false
+            }}
+          />
 
           {/* Parties Screen with Custom Header */}
           <Stack.Screen
             name="Parties"
             component={Parties}
             options={{
-              header: () => <HeaderParties />,
+              // header: () => <HeaderParties />,
+              headerShown: false
             }}
           />
+          <Stack.Screen name="psearch" component={SearchPartyScreen} options={{
+            headerShown: false
+          }}/>
           <Stack.Screen
             name="stock"
             component={StockReport}

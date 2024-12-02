@@ -4,6 +4,7 @@ import PartieBt from "../components/bottom/PartieBt"
 import { useState } from "react"
 import { useGlobalState } from "../components/providers/GlobalStateProvider"
 import { ScrollView } from "react-native"
+import HeaderParties from "../components/HeaderParties"
 export default function Parties() {
     const { data } = useGlobalState()
    
@@ -13,6 +14,7 @@ export default function Parties() {
         setSelectedText(s)
     }
     return<>
+    <HeaderParties/>
     <Nav handleChange={handleChange}/>   
     <ScrollView>
     <Partie toShow={selectedText} data={data?.data.parties}/>

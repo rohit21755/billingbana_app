@@ -1,8 +1,9 @@
 import { View, Text, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Entypo from '@expo/vector-icons/Entypo';
-
+import { useNavigation } from '@react-navigation/native';
 export default function HeaderParties() {
+    const navigation = useNavigation()
     return(<>
     <LinearGradient 
     colors={['rgba(186, 216, 255, 1)', 'rgba(255, 255, 255, 1)']}
@@ -36,7 +37,7 @@ export default function HeaderParties() {
             flexDirection: 'row',
             gap: 6
         }}>
-            <TouchableOpacity><Entypo name="magnifying-glass" size={24} color="black" /></TouchableOpacity>
+            <TouchableOpacity onPress={()=>navigation.navigate('psearch')}><Entypo name="magnifying-glass" size={24} color="black" /></TouchableOpacity>
             <TouchableOpacity></TouchableOpacity>
         </View>
         
